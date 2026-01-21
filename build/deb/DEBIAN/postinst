@@ -24,7 +24,6 @@ echo ""
 echo "3. Test mount:"
 echo "   sudo cvmfs_config probe"
 echo ""
-echo "For documentation: https://openemage.org/docs"
 echo "========================================================================="
 echo ""
 

@@ -183,4 +183,4 @@ Apache 2.0
 ## Contact
 
 OPENEMAGE Team <info@openemage.org>
-https://openemage.org
+https://info.openemage.org

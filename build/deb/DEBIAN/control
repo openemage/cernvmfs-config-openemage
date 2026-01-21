@@ -5,7 +5,7 @@ Priority: optional
 Architecture: all
 Depends: cvmfs (>= 2.9.0)
 Maintainer: OPENEMAGE Team <info@openemage.org>
-Homepage: https://openemage.org
+Homepage: https://info.openemage.org
 Description: CernVM-FS configuration for OPENEMAGE repositories
  Configuration package for CernVM-FS to access OPENEMAGE open spatial
  biology data repositories. Includes configuration for all *.openemage.org

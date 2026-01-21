@@ -4,7 +4,7 @@ Version: 1.0.0
 Release: 1
 License: Apache-2.0
 Group: Applications/System
-URL: https://openemage.org
+URL: https://info.openemage.org
 BuildArch: noarch
 Requires: cvmfs >= 2.9.0
 
@@ -67,7 +67,6 @@ echo ""
 echo "3. Test mount:"
 echo "   sudo cvmfs_config probe"
 echo ""
-echo "For documentation: https://openemage.org/docs"
 echo "========================================================================="
 echo ""
 
