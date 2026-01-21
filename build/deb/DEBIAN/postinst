@@ -1,0 +1,32 @@
+#!/bin/bash
+set -e
+
+echo ""
+echo "========================================================================="
+echo "OPENEMAGE CernVM-FS configuration installed"
+echo "========================================================================="
+echo ""
+echo "Configured repositories:"
+for conf in /etc/cvmfs/config.d/*.openemage.org.conf; do
+    if [ -f "$conf" ] && [ "$(basename "$conf")" != "TEMPLATE.openemage.org.conf" ]; then
+        repo=$(basename "$conf" .conf)
+        echo "  - $repo"
+    fi
+done
+echo ""
+echo "Next steps:"
+echo "1. Add repositories to /etc/cvmfs/default.local:"
+echo "   CVMFS_REPOSITORIES='cryoet-opendata-poc.openemage.org'"
+echo ""
+echo "2. Run setup:"
+echo "   sudo cvmfs_config setup"
+echo ""
+echo "3. Test mount:"
+echo "   sudo cvmfs_config probe"
+echo ""
+echo "For documentation: https://openemage.org/docs"
+echo "========================================================================="
+echo ""
+
+#DEBHELPER#
+exit 0
