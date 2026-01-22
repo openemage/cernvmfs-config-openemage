@@ -10,8 +10,8 @@ mkdir -p src/keys/cryoet-opendata-poc.openemage.org
 cp /path/to/cryoet-opendata-poc.openemage.org.pub \
    src/keys/cryoet-opendata-poc.openemage.org/
 
-# 2. Build packages
-./build.sh 1.0.0
+# 2. Build packages (requires fpm)
+./build.sh 0.1.0
 
 # 3. Packages appear in output/
 ls output/
@@ -80,7 +80,7 @@ scp user@publisher:/etc/cvmfs/keys/spatial-omics.openemage.org.pub \
 ### Step 3: Build Packages
 
 ```bash
-./build.sh 1.1.0
+./build.sh 0.1.1
 ```
 
 ## Repository Configuration Details
@@ -105,13 +105,16 @@ scp user@publisher:/etc/cvmfs/keys/spatial-omics.openemage.org.pub \
 
 ## Building Packages
 
+Prerequisite: install `fpm` (https://github.com/jordansissel/fpm), e.g. `gem install fpm`.
+On macOS, also install `gnu-tar` (for DEB) and `rpm` (for RPM) via Homebrew.
+
 ```bash
 ./build.sh [VERSION]
 
 # Examples:
-./build.sh 1.0.0    # First release
-./build.sh 1.1.0    # Added new repository
-./build.sh 2.0.0    # Major update
+./build.sh 0.1.0    # First release
+./build.sh 0.1.1    # Added new repository
+./build.sh 0.2.0    # Major update
 ```
 
 ## Package Contents
@@ -127,7 +130,7 @@ All packages include:
 ### Red Hat/Rocky/Alma/Fedora:
 ```bash
 sudo yum install cvmfs
-sudo rpm -ivh cvmfs-config-openemage-1.0.0-1.noarch.rpm
+sudo rpm -ivh cvmfs-config-openemage-0.1.0-1.noarch.rpm
 echo 'CVMFS_REPOSITORIES="cryoet-opendata-poc.openemage.org"' | sudo tee -a /etc/cvmfs/default.local
 sudo cvmfs_config setup
 sudo cvmfs_config probe
@@ -136,7 +139,7 @@ sudo cvmfs_config probe
 ### Debian/Ubuntu:
 ```bash
 sudo apt install cvmfs
-sudo dpkg -i cvmfs-config-openemage_1.0.0_all.deb
+sudo dpkg -i cvmfs-config-openemage_0.1.0_all.deb
 echo 'CVMFS_REPOSITORIES="cryoet-opendata-poc.openemage.org"' | sudo tee -a /etc/cvmfs/default.local
 sudo cvmfs_config setup
 sudo cvmfs_config probe
@@ -144,7 +147,7 @@ sudo cvmfs_config probe
 
 ### Manual (Tarball):
 ```bash
-sudo tar -xzf cvmfs-config-openemage-1.0.0.tar.gz -C /
+sudo tar -xzf cvmfs-config-openemage-0.1.0.tar.gz -C /
 echo 'CVMFS_REPOSITORIES="cryoet-opendata-poc.openemage.org"' | sudo tee -a /etc/cvmfs/default.local
 sudo cvmfs_config setup
 sudo cvmfs_config probe

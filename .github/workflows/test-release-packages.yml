@@ -1,0 +1,63 @@
+name: Test Release Packages
+
+on:
+  release:
+    types: [published]
+
+permissions:
+  contents: read
+
+jobs:
+  test-deb:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Install CVMFS client
+        run: |
+          wget https://ecsft.cern.ch/dist/cvmfs/cvmfs-release/cvmfs-release-latest_all.deb
+          sudo dpkg -i cvmfs-release-latest_all.deb
+          sudo apt-get update
+          sudo apt-get install -y cvmfs
+
+      - name: Download release deb
+        env:
+          TAG: ${{ github.event.release.tag_name }}
+        run: |
+          VERSION="${TAG#v}"
+          wget "https://github.com/${GITHUB_REPOSITORY}/releases/download/${TAG}/cvmfs-config-openemage_${VERSION}_all.deb"
+
+      - name: Install deb and verify files
+        env:
+          TAG: ${{ github.event.release.tag_name }}
+        run: |
+          VERSION="${TAG#v}"
+          sudo dpkg -i "cvmfs-config-openemage_${VERSION}_all.deb"
+          test -f /etc/cvmfs/domain.d/openemage.org.conf
+          test -f /etc/cvmfs/config.d/TEMPLATE.openemage.org.conf
+
+  test-rpm:
+    runs-on: ubuntu-latest
+    container:
+      image: centos:7
+    steps:
+      - name: Install CVMFS client
+        run: |
+          yum install -y https://ecsft.cern.ch/dist/cvmfs/cvmfs-release/cvmfs-release-latest.noarch.rpm
+          yum-config-manager --enable cernvm-config
+          yum install -y cvmfs
+
+      - name: Download release rpm
+        env:
+          TAG: ${{ github.event.release.tag_name }}
+        run: |
+          VERSION="${TAG#v}"
+          curl -L -o "cvmfs-config-openemage-${VERSION}-1.noarch.rpm" \
+            "https://github.com/${GITHUB_REPOSITORY}/releases/download/${TAG}/cvmfs-config-openemage-${VERSION}-1.noarch.rpm"
+
+      - name: Install rpm and verify files
+        env:
+          TAG: ${{ github.event.release.tag_name }}
+        run: |
+          VERSION="${TAG#v}"
+          rpm -i "cvmfs-config-openemage-${VERSION}-1.noarch.rpm"
+          test -f /etc/cvmfs/domain.d/openemage.org.conf
+          test -f /etc/cvmfs/config.d/TEMPLATE.openemage.org.conf
