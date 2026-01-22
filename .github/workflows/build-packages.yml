@@ -74,3 +74,10 @@ jobs:
         with:
           generate_release_notes: true
           files: dist/*
+
+  test-release:
+    needs: release-assets
+    if: startsWith(github.ref, 'refs/tags/')
+    uses: ./.github/workflows/test-release-packages.yml
+    with:
+      tag: ${{ github.ref_name }}

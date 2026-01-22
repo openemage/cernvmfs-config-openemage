@@ -3,6 +3,11 @@ name: Test Release Packages
 on:
   release:
     types: [published]
+  workflow_call:
+    inputs:
+      tag:
+        required: true
+        type: string
 
 permissions:
   contents: read
@@ -14,9 +19,12 @@ jobs:
       - name: Determine tag
         run: |
           TAG=""
-          if [[ "${GITHUB_EVENT_NAME}" == "release" ]]; then
+          if [[ "${GITHUB_EVENT_NAME}" == "workflow_call" ]]; then
+            TAG="${{ inputs.tag }}"
+          elif [[ "${GITHUB_EVENT_NAME}" == "release" ]]; then
             TAG="${{ github.event.release.tag_name }}"
           fi
+          TAG="${TAG#refs/tags/}"
           echo "TAG=${TAG}" >> "$GITHUB_ENV"
 
       - name: Install CVMFS client
@@ -54,9 +62,12 @@ jobs:
       - name: Determine tag
         run: |
           TAG=""
-          if [[ "${GITHUB_EVENT_NAME}" == "release" ]]; then
+          if [[ "${GITHUB_EVENT_NAME}" == "workflow_call" ]]; then
+            TAG="${{ inputs.tag }}"
+          elif [[ "${GITHUB_EVENT_NAME}" == "release" ]]; then
             TAG="${{ github.event.release.tag_name }}"
           fi
+          TAG="${TAG#refs/tags/}"
           echo "TAG=${TAG}" >> "$GITHUB_ENV"
 
       - name: Install CVMFS client
