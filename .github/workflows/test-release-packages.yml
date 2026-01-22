@@ -3,16 +3,12 @@ name: Test Release Packages
 on:
   release:
     types: [published]
-  workflow_run:
-    workflows: ["Build Packages"]
-    types: [completed]
 
 permissions:
   contents: read
 
 jobs:
   test-deb:
-    if: github.event_name == 'release' || (github.event.workflow_run.conclusion == 'success' && startsWith(github.event.workflow_run.ref, 'refs/tags/'))
     runs-on: ubuntu-latest
     steps:
       - name: Determine tag
@@ -20,10 +16,7 @@ jobs:
           TAG=""
           if [[ "${GITHUB_EVENT_NAME}" == "release" ]]; then
             TAG="${{ github.event.release.tag_name }}"
-          else
-            TAG="${{ github.event.workflow_run.ref }}"
           fi
-          TAG="${TAG#refs/tags/}"
           echo "TAG=${TAG}" >> "$GITHUB_ENV"
 
       - name: Install CVMFS client
@@ -36,7 +29,15 @@ jobs:
       - name: Download release deb
         run: |
           VERSION="${TAG#v}"
-          wget "https://github.com/${GITHUB_REPOSITORY}/releases/download/${TAG}/cvmfs-config-openemage_${VERSION}-1_all.deb"
+          url="https://github.com/${GITHUB_REPOSITORY}/releases/download/${TAG}/cvmfs-config-openemage_${VERSION}-1_all.deb"
+          for attempt in {1..10}; do
+            if wget -q "$url"; then
+              exit 0
+            fi
+            sleep 10
+          done
+          echo "Failed to download: $url"
+          exit 1
 
       - name: Install deb and verify files
         run: |
@@ -46,7 +47,6 @@ jobs:
           test -f /etc/cvmfs/config.d/TEMPLATE.openemage.org.conf
 
   test-rpm:
-    if: github.event_name == 'release' || (github.event.workflow_run.conclusion == 'success' && startsWith(github.event.workflow_run.ref, 'refs/tags/'))
     runs-on: ubuntu-latest
     container:
       image: centos:7
@@ -56,10 +56,7 @@ jobs:
           TAG=""
           if [[ "${GITHUB_EVENT_NAME}" == "release" ]]; then
             TAG="${{ github.event.release.tag_name }}"
-          else
-            TAG="${{ github.event.workflow_run.ref }}"
           fi
-          TAG="${TAG#refs/tags/}"
           echo "TAG=${TAG}" >> "$GITHUB_ENV"
 
       - name: Install CVMFS client
@@ -71,8 +68,15 @@ jobs:
       - name: Download release rpm
         run: |
           VERSION="${TAG#v}"
-          curl -L -o "cvmfs-config-openemage-${VERSION}-1.noarch.rpm" \
-            "https://github.com/${GITHUB_REPOSITORY}/releases/download/${TAG}/cvmfs-config-openemage-${VERSION}-1.noarch.rpm"
+          url="https://github.com/${GITHUB_REPOSITORY}/releases/download/${TAG}/cvmfs-config-openemage-${VERSION}-1.noarch.rpm"
+          for attempt in {1..10}; do
+            if curl -fsSL -o "cvmfs-config-openemage-${VERSION}-1.noarch.rpm" "$url"; then
+              exit 0
+            fi
+            sleep 10
+          done
+          echo "Failed to download: $url"
+          exit 1
 
       - name: Install rpm and verify files
         run: |
