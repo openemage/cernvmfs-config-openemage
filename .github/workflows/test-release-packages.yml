@@ -25,6 +25,10 @@ jobs:
             TAG="${{ github.event.release.tag_name }}"
           fi
           TAG="${TAG#refs/tags/}"
+          if [[ -z "${TAG}" ]]; then
+            echo "Tag not found; ensure a tag ref or release event is provided."
+            exit 1
+          fi
           echo "TAG=${TAG}" >> "$GITHUB_ENV"
 
       - name: Install CVMFS client
@@ -57,7 +61,7 @@ jobs:
   test-rpm:
     runs-on: ubuntu-latest
     container:
-      image: centos:7
+      image: rockylinux:8
     steps:
       - name: Determine tag
         run: |
@@ -68,13 +72,18 @@ jobs:
             TAG="${{ github.event.release.tag_name }}"
           fi
           TAG="${TAG#refs/tags/}"
+          if [[ -z "${TAG}" ]]; then
+            echo "Tag not found; ensure a tag ref or release event is provided."
+            exit 1
+          fi
           echo "TAG=${TAG}" >> "$GITHUB_ENV"
 
       - name: Install CVMFS client
         run: |
-          yum install -y https://ecsft.cern.ch/dist/cvmfs/cvmfs-release/cvmfs-release-latest.noarch.rpm
-          yum-config-manager --enable cernvm-config
-          yum install -y cvmfs
+          dnf -y install https://ecsft.cern.ch/dist/cvmfs/cvmfs-release/cvmfs-release-latest.noarch.rpm
+          dnf -y install dnf-plugins-core
+          dnf config-manager --set-enabled cernvm-config
+          dnf -y install cvmfs
 
       - name: Download release rpm
         run: |
