@@ -40,7 +40,7 @@ cvmfs-config-openemage-builder/
 ├── build/                      # Temporary build files (generated)
 └── output/                     # Final packages (generated)
     ├── cvmfs-config-openemage-VERSION.tar.gz
-    ├── cvmfs-config-openemage_VERSION_all.deb
+    ├── cvmfs-config-openemage_VERSION-1_all.deb
     └── cvmfs-config-openemage-VERSION-1.noarch.rpm
 ```
 
@@ -139,7 +139,7 @@ sudo cvmfs_config probe
 ### Debian/Ubuntu:
 ```bash
 sudo apt install cvmfs
-sudo dpkg -i cvmfs-config-openemage_0.1.0_all.deb
+sudo dpkg -i cvmfs-config-openemage_0.1.0-1_all.deb
 echo 'CVMFS_REPOSITORIES="cryoet-opendata-poc.openemage.org"' | sudo tee -a /etc/cvmfs/default.local
 sudo cvmfs_config setup
 sudo cvmfs_config probe

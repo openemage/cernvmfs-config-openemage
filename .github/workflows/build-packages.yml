@@ -45,7 +45,7 @@ jobs:
             VERSION="${GITHUB_REF#refs/tags/v}"
           fi
           tar -tzf "output/cvmfs-config-openemage-${VERSION}.tar.gz" >/dev/null
-          dpkg-deb -c "output/cvmfs-config-openemage_${VERSION}_all.deb" >/dev/null
+          dpkg-deb -c "output/cvmfs-config-openemage_${VERSION}-1_all.deb" >/dev/null
           rpm -qlp "output/cvmfs-config-openemage-${VERSION}-1.noarch.rpm" >/dev/null
 
       - name: Upload artifacts
@@ -53,3 +53,22 @@ jobs:
         with:
           name: cvmfs-config-openemage-packages
           path: output/*
+
+  release-assets:
+    needs: build-packages
+    if: startsWith(github.ref, 'refs/tags/v')
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - name: Download artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: cvmfs-config-openemage-packages
+          path: dist
+
+      - name: Upload release assets
+        uses: softprops/action-gh-release@v2
+        with:
+          generate_release_notes: true
+          files: dist/*

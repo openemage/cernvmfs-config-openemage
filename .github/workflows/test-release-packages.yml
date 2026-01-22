@@ -23,14 +23,14 @@ jobs:
           TAG: ${{ github.event.release.tag_name }}
         run: |
           VERSION="${TAG#v}"
-          wget "https://github.com/${GITHUB_REPOSITORY}/releases/download/${TAG}/cvmfs-config-openemage_${VERSION}_all.deb"
+          wget "https://github.com/${GITHUB_REPOSITORY}/releases/download/${TAG}/cvmfs-config-openemage_${VERSION}-1_all.deb"
 
       - name: Install deb and verify files
         env:
           TAG: ${{ github.event.release.tag_name }}
         run: |
           VERSION="${TAG#v}"
-          sudo dpkg -i "cvmfs-config-openemage_${VERSION}_all.deb"
+          sudo dpkg -i "cvmfs-config-openemage_${VERSION}-1_all.deb"
           test -f /etc/cvmfs/domain.d/openemage.org.conf
           test -f /etc/cvmfs/config.d/TEMPLATE.openemage.org.conf
 

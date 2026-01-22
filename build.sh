@@ -144,9 +144,10 @@ echo "[3/4] Building DEB package..."
     --depends "cvmfs (>= 2.9.0)" \
     --maintainer "OPENEMAGE Team <info@openemage.org>" \
     --after-install "${POSTINST}" \
-    -p "${OUTPUT_DIR}/cvmfs-config-openemage_${VERSION}_all.deb" \
+    --iteration 1 \
+    -p "${OUTPUT_DIR}/cvmfs-config-openemage_${VERSION}-1_all.deb" \
     etc >/dev/null
-echo "  ✓ Created: cvmfs-config-openemage_${VERSION}_all.deb"
+echo "  ✓ Created: cvmfs-config-openemage_${VERSION}-1_all.deb"
 echo ""
 
 echo "[4/4] Building RPM package..."
