@@ -17,6 +17,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Determine tag
+        shell: bash
         run: |
           TAG=""
           if [ "${GITHUB_EVENT_NAME}" = "workflow_call" ]; then
@@ -24,11 +25,12 @@ jobs:
           elif [ "${GITHUB_EVENT_NAME}" = "release" ]; then
             TAG="${{ github.event.release.tag_name }}"
           fi
-          TAG="${TAG#refs/tags/}"
+          TAG="$(printf '%s' "${TAG}" | sed 's#^refs/tags/##')"
           if [ -z "${TAG}" ]; then
             echo "Tag not found; ensure a tag ref or release event is provided."
             exit 1
           fi
+          echo "Resolved tag: ${TAG}"
           echo "TAG=${TAG}" >> "$GITHUB_ENV"
 
       - name: Install CVMFS client
@@ -64,6 +66,7 @@ jobs:
       image: rockylinux:8
     steps:
       - name: Determine tag
+        shell: bash
         run: |
           TAG=""
           if [ "${GITHUB_EVENT_NAME}" = "workflow_call" ]; then
@@ -71,11 +74,12 @@ jobs:
           elif [ "${GITHUB_EVENT_NAME}" = "release" ]; then
             TAG="${{ github.event.release.tag_name }}"
           fi
-          TAG="${TAG#refs/tags/}"
+          TAG="$(printf '%s' "${TAG}" | sed 's#^refs/tags/##')"
           if [ -z "${TAG}" ]; then
             echo "Tag not found; ensure a tag ref or release event is provided."
             exit 1
           fi
+          echo "Resolved tag: ${TAG}"
           echo "TAG=${TAG}" >> "$GITHUB_ENV"
 
       - name: Install CVMFS client
