@@ -19,13 +19,13 @@ jobs:
       - name: Determine tag
         run: |
           TAG=""
-          if [[ "${GITHUB_EVENT_NAME}" == "workflow_call" ]]; then
+          if [ "${GITHUB_EVENT_NAME}" = "workflow_call" ]; then
             TAG="${{ inputs.tag }}"
-          elif [[ "${GITHUB_EVENT_NAME}" == "release" ]]; then
+          elif [ "${GITHUB_EVENT_NAME}" = "release" ]; then
             TAG="${{ github.event.release.tag_name }}"
           fi
           TAG="${TAG#refs/tags/}"
-          if [[ -z "${TAG}" ]]; then
+          if [ -z "${TAG}" ]; then
             echo "Tag not found; ensure a tag ref or release event is provided."
             exit 1
           fi
@@ -66,13 +66,13 @@ jobs:
       - name: Determine tag
         run: |
           TAG=""
-          if [[ "${GITHUB_EVENT_NAME}" == "workflow_call" ]]; then
+          if [ "${GITHUB_EVENT_NAME}" = "workflow_call" ]; then
             TAG="${{ inputs.tag }}"
-          elif [[ "${GITHUB_EVENT_NAME}" == "release" ]]; then
+          elif [ "${GITHUB_EVENT_NAME}" = "release" ]; then
             TAG="${{ github.event.release.tag_name }}"
           fi
           TAG="${TAG#refs/tags/}"
-          if [[ -z "${TAG}" ]]; then
+          if [ -z "${TAG}" ]; then
             echo "Tag not found; ensure a tag ref or release event is provided."
             exit 1
           fi
