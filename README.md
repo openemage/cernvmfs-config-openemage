@@ -6,9 +6,9 @@ Build system for creating CVMFS client configuration packages for OPENEMAGE repo
 
 ```bash
 # 1. Add your repository's public key
-mkdir -p src/keys/cryoet-opendata-poc.openemage.org
+mkdir -p src/etc/cvmfs/keys/cryoet-opendata-poc.openemage.org
 cp /path/to/cryoet-opendata-poc.openemage.org.pub \
-   src/keys/cryoet-opendata-poc.openemage.org/
+   src/etc/cvmfs/keys/cryoet-opendata-poc.openemage.org/
 
 # 2. Build packages (requires fpm)
 ./build.sh 0.1.0
@@ -25,17 +25,17 @@ cvmfs-config-openemage-builder/
 ├── build.sh                    # Main build script
 │
 ├── src/                        # Source files for packages
-│   ├── etc/cvmfs/
-│   │   ├── domain.d/
-│   │   │   └── openemage.org.conf          # Domain-wide settings
-│   │   └── config.d/
-│   │       ├── cryoet-opendata-poc.openemage.org.conf   # Per-repo config
-│   │       └── TEMPLATE.openemage.org.conf               # Template
-│   └── keys/
-│       ├── cryoet-opendata-poc.openemage.org/
-│       │   └── cryoet-opendata-poc.openemage.org.pub
-│       └── <other-repo>.openemage.org/
-│           └── <other-repo>.openemage.org.pub
+│   └── etc/cvmfs/
+│       ├── domain.d/
+│       │   └── openemage.org.conf          # Domain-wide settings
+│       ├── config.d/
+│       │   ├── cryoet-opendata-poc.openemage.org.conf   # Per-repo config
+│       │   └── TEMPLATE.openemage.org.conf               # Template
+│       └── keys/
+│           ├── cryoet-opendata-poc.openemage.org/
+│           │   └── cryoet-opendata-poc.openemage.org.pub
+│           └── <other-repo>.openemage.org/
+│               └── <other-repo>.openemage.org.pub
 │
 ├── build/                      # Temporary build files (generated)
 └── output/                     # Final packages (generated)
@@ -70,11 +70,11 @@ EOF
 
 ```bash
 # Create key directory
-mkdir -p src/keys/spatial-omics.openemage.org
+mkdir -p src/etc/cvmfs/keys/spatial-omics.openemage.org
 
 # Copy public key from publisher
 scp user@publisher:/etc/cvmfs/keys/spatial-omics.openemage.org.pub \
-    src/keys/spatial-omics.openemage.org/
+    src/etc/cvmfs/keys/spatial-omics.openemage.org/
 ```
 
 ### Step 3: Build Packages
@@ -166,7 +166,7 @@ This follows the EESSI model:
 ### Updating a Repository
 
 1. Update config file in `src/etc/cvmfs/config.d/`
-2. Update public key if needed in `src/keys/`
+2. Update public key if needed in `src/etc/cvmfs/keys/`
 3. Rebuild with new version number
 4. Distribute updated packages
 

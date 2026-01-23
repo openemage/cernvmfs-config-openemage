@@ -44,8 +44,8 @@ rm -rf "${BUILD_DIR}" "${OUTPUT_DIR}"
 mkdir -p "${BUILD_DIR}" "${OUTPUT_DIR}" "${PACKAGE_DIR}"
 
 # Check if we have any keys
-if [ ! -d "${BUILDER_DIR}/src/keys" ] || [ -z "$(find "${BUILDER_DIR}/src/keys" -name '*.pub' 2>/dev/null)" ]; then
-    echo "WARNING: No public keys found in src/keys/"
+if [ ! -d "${BUILDER_DIR}/src/etc/cvmfs/keys" ] || [ -z "$(find "${BUILDER_DIR}/src/etc/cvmfs/keys" -name '*.pub' 2>/dev/null)" ]; then
+    echo "WARNING: No public keys found in src/etc/cvmfs/keys/"
     echo "Add repository public keys before building packages."
     echo ""
 fi
@@ -58,11 +58,11 @@ for conf in "${BUILDER_DIR}"/src/etc/cvmfs/config.d/*.openemage.org.conf; do
         echo "  - $repo"
 
         # Check if key exists
-        if [ -d "${BUILDER_DIR}/src/keys/$repo" ]; then
-            key_count=$(find "${BUILDER_DIR}/src/keys/$repo" -name '*.pub' 2>/dev/null | wc -l)
+        if [ -d "${BUILDER_DIR}/src/etc/cvmfs/keys/$repo" ]; then
+            key_count=$(find "${BUILDER_DIR}/src/etc/cvmfs/keys/$repo" -name '*.pub' 2>/dev/null | wc -l)
             echo "    Keys: $key_count"
         else
-            echo "    Keys: MISSING - create src/keys/$repo/ and add keys"
+            echo "    Keys: MISSING - create src/etc/cvmfs/keys/$repo/ and add keys"
         fi
     fi
 done
@@ -74,10 +74,6 @@ echo ""
 echo "[1/4] Assembling package payload..."
 mkdir -p "${PACKAGE_DIR}/etc/cvmfs"
 cp -r "${BUILDER_DIR}/src/etc/cvmfs"/* "${PACKAGE_DIR}/etc/cvmfs/"
-if [ -d "${BUILDER_DIR}/src/keys" ]; then
-    mkdir -p "${PACKAGE_DIR}/etc/cvmfs/keys"
-    cp -r "${BUILDER_DIR}/src/keys"/* "${PACKAGE_DIR}/etc/cvmfs/keys/" 2>/dev/null || true
-fi
 echo "  ✓ Assembled: ${PACKAGE_DIR}/etc"
 echo ""
 
