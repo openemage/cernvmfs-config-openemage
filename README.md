@@ -181,7 +181,7 @@ CVMFS_SERVER_URL="https://bucket1.s3.region1.amazonaws.com/@fqrn@;https://bucket
 
 ## License
 
-Apache 2.0
+GPLv3
 
 ## Contact
 
