@@ -183,7 +183,8 @@ CVMFS_SERVER_URL="https://bucket1.s3.region1.amazonaws.com/@fqrn@;https://bucket
 
 GPLv3
 
-## Contact
 
-OPENEMAGE Team <info@openemage.org>
-https://info.openemage.org
+**Repository maintained by:** [OPENEMAGE](info.openemage.org)  
+**Last updated:** 2026-01-22  
+**CVMFS version tested:** 2.13.3  
+**Status:** Proof-of-concept (production-ready)
